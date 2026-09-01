@@ -1,0 +1,1310 @@
+<title>Herz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg:         #0E1015;
+  --surface:    #13151C;
+  --card:       #1A1D28;
+  --card2:      #1F2333;
+  --border:     #252A3A;
+  --border2:    #2E3448;
+  --text:       #EDF0F7;
+  --muted:      #7A8099;
+  --muted2:     #555E7A;
+  --accent:     #F5A014;
+  --accent-dim: rgba(245,160,20,.10);
+  --accent-glo: rgba(245,160,20,.22);
+  --green:      #4CAF7D;
+  --blue:       #82AAFF;
+  --purple:     #C792EA;
+  --red:        #F07178;
+  --code-bg:    #0D0F15;
+  --sidebar-w:  256px;
+  --max-prose:  70ch;
+  font-size: 15px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.7;min-height:100vh}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar-w);
+  position:fixed;top:0;left:0;bottom:0;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+  z-index:200;
+}
+.sb-logo{
+  display:flex;align-items:center;gap:10px;
+  padding:26px 22px 22px;
+  border-bottom:1px solid var(--border);
+}
+.sb-mark{
+  width:34px;height:34px;border-radius:7px;
+  background:var(--accent);color:#0E1015;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:19px;
+  display:grid;place-items:center;flex-shrink:0;
+}
+.sb-name{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.5px}
+.sb-sub{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted2);letter-spacing:.4px;margin-top:1px}
+nav{padding:18px 14px;flex:1;overflow-y:auto}
+.nav-grp{margin-bottom:22px}
+.nav-lbl{
+  font-size:9.5px;font-weight:600;letter-spacing:1.4px;
+  text-transform:uppercase;color:var(--muted2);
+  padding:0 8px;margin-bottom:4px;
+}
+.nav-a{
+  display:flex;align-items:center;gap:7px;
+  padding:6px 8px;border-radius:6px;
+  color:var(--muted);font-size:13px;font-weight:500;
+  transition:background .12s,color .12s;
+  white-space:nowrap;
+}
+.nav-a:hover{background:var(--card);color:var(--text);text-decoration:none}
+.nav-a.active{background:var(--accent-dim);color:var(--accent)}
+.nav-a .dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.55;flex-shrink:0}
+.sb-foot{padding:14px 22px;border-top:1px solid var(--border);font-size:11.5px;color:var(--muted2)}
+.sb-foot a{color:var(--muted);font-size:11.5px}
+.sb-foot a:hover{color:var(--accent)}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar-w);min-width:0}
+
+/* ── HERO ── */
+.hero{
+  padding:88px 72px 80px;
+  border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.hero::after{
+  content:'';position:absolute;
+  top:-150px;left:-80px;width:600px;height:600px;
+  background:radial-gradient(circle,var(--accent-glo) 0%,transparent 68%);
+  pointer-events:none;
+}
+.hero-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--accent);
+  letter-spacing:1.8px;text-transform:uppercase;
+  margin-bottom:22px;position:relative;z-index:1;
+}
+.hero h1{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(38px,5.5vw,68px);
+  line-height:1.03;letter-spacing:-2.5px;
+  text-wrap:balance;margin-bottom:22px;
+  position:relative;z-index:1;
+}
+.hero h1 em{color:var(--accent);font-style:normal}
+.hero-sub{
+  font-size:17px;color:var(--muted);
+  max-width:54ch;line-height:1.65;
+  margin-bottom:38px;position:relative;z-index:1;
+}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;position:relative;z-index:1}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 22px;border-radius:8px;
+  font-size:14px;font-weight:600;cursor:pointer;
+  transition:all .15s;border:1px solid transparent;line-height:1;
+}
+.btn-a{background:var(--accent);color:#0E1015}
+.btn-a:hover{background:#ffb733;text-decoration:none;color:#0E1015}
+.btn-b{background:transparent;color:var(--text);border-color:var(--border2)}
+.btn-b:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+
+/* ── VERSION STRIP ── */
+.vstrip{
+  display:flex;gap:10px;flex-wrap:wrap;
+  padding:14px 72px;
+  background:var(--surface);border-bottom:1px solid var(--border);
+}
+.vbadge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 12px 4px 7px;border-radius:999px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  border:1px solid var(--border2);color:var(--muted);
+}
+.vdot{width:7px;height:7px;border-radius:50%}
+.vdot.g{background:#4CAF7D}
+.vdot.a{background:var(--accent)}
+
+/* ── CONTENT ── */
+.content{padding:64px 72px 120px;max-width:calc(var(--max-prose) + 144px)}
+
+section{margin-bottom:88px}
+section:target{scroll-margin-top:28px}
+
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;
+  color:var(--accent);letter-spacing:1.8px;text-transform:uppercase;
+  margin-bottom:12px;
+}
+h2{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:30px;
+  letter-spacing:-.7px;margin-bottom:18px;text-wrap:balance;
+}
+h3{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:18.5px;
+  letter-spacing:-.3px;margin-bottom:10px;margin-top:40px;
+}
+h4{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:6px}
+p{color:#BBC1D6;margin-bottom:16px;max-width:var(--max-prose)}
+ul,ol{color:#BBC1D6;padding-left:22px;margin-bottom:18px;max-width:var(--max-prose)}
+li{margin-bottom:6px}
+strong{color:var(--text);font-weight:600}
+hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+
+/* ── CODE ── */
+code{
+  font-family:'JetBrains Mono',monospace;font-size:.84em;
+  background:var(--accent-dim);color:var(--accent);
+  padding:1px 5px;border-radius:4px;
+}
+pre{
+  background:var(--code-bg);border:1px solid var(--border);
+  border-radius:10px;overflow-x:auto;
+  margin-bottom:28px;position:relative;
+}
+pre code{
+  display:block;padding:20px 26px;
+  background:none;color:#C0C8DC;
+  font-size:12.5px;line-height:1.8;border-radius:0;
+}
+.pre-lang{
+  position:absolute;top:11px;right:16px;
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  color:var(--muted2);letter-spacing:.5px;text-transform:uppercase;
+}
+/* Syntax */
+.kw{color:var(--purple)}
+.str{color:#C3E88D}
+.cm{color:#3D4462;font-style:italic}
+.am{color:var(--accent)}
+.ty{color:var(--blue)}
+.num{color:#F78C6C}
+.op{color:#89DDFF}
+.prop{color:#B2CCD6}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto;margin-bottom:32px;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{
+  text-align:left;padding:10px 16px;
+  background:var(--card);color:var(--muted);
+  font-size:10px;letter-spacing:.9px;text-transform:uppercase;font-weight:600;
+  border-bottom:1px solid var(--border);
+}
+td{padding:12px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.mono{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--accent)}
+td.ok{color:var(--green);font-family:'JetBrains Mono',monospace;font-size:11.5px}
+td.warn{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11.5px}
+
+/* ── CALLOUT ── */
+.callout{
+  background:var(--accent-dim);border-left:3px solid var(--accent);
+  border-radius:0 8px 8px 0;padding:14px 18px;
+  margin-bottom:24px;font-size:13.5px;color:var(--text);
+  max-width:var(--max-prose);
+}
+.callout strong{color:var(--accent)}
+.callout.blue{background:rgba(130,170,255,.08);border-color:var(--blue)}
+.callout.blue strong{color:var(--blue)}
+.callout.green{background:rgba(76,175,125,.08);border-color:var(--green)}
+.callout.green strong{color:var(--green)}
+
+/* ── CARDS ── */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-bottom:32px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px}
+.card-icon{font-size:22px;margin-bottom:10px}
+.card h4{margin-bottom:5px}
+.card p{font-size:12.5px;margin-bottom:0}
+
+/* ── STEPS ── */
+.steps{list-style:none;padding:0;counter-reset:step;margin-bottom:32px}
+.steps li{counter-increment:step;display:flex;gap:16px;padding-bottom:30px;position:relative}
+.steps li:not(:last-child)::before{
+  content:'';position:absolute;left:15px;top:34px;bottom:0;
+  width:1px;background:var(--border2);
+}
+.step-n{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  background:var(--accent-dim);border:1px solid var(--accent);
+  color:var(--accent);font-family:'JetBrains Mono',monospace;
+  font-size:13px;display:grid;place-items:center;
+}
+.step-n::before{content:counter(step)}
+.step-b h4{margin-bottom:6px;margin-top:4px}
+.step-b p{font-size:13.5px;margin-bottom:10px}
+
+/* ── ENDPOINT ── */
+.ep{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:8px;padding:14px 18px;margin-bottom:10px;
+}
+.ep-line{display:flex;align-items:center;gap:8px}
+.ep-path{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text)}
+.ep-desc{font-size:12.5px;color:var(--muted);margin-top:5px}
+.ep-params{margin-top:10px}
+.ep-params .param{
+  display:flex;gap:8px;font-size:12px;padding:5px 0;
+  border-top:1px solid var(--border);
+}
+.ep-params .pname{font-family:'JetBrains Mono',monospace;color:var(--accent);flex-shrink:0;min-width:120px}
+.ep-params .ptype{color:var(--blue);font-family:'JetBrains Mono',monospace;flex-shrink:0;min-width:70px}
+.ep-params .pdesc{color:var(--muted)}
+
+/* ── METHOD CHIPS ── */
+.m{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:500;padding:2px 9px;border-radius:4px}
+.get{background:rgba(76,175,125,.18);color:var(--green)}
+.post{background:rgba(130,170,255,.18);color:var(--blue)}
+.del{background:rgba(240,113,120,.18);color:var(--red)}
+
+/* ── FILE TREE ── */
+.tree{
+  background:var(--code-bg);border:1px solid var(--border);
+  border-radius:10px;padding:20px 24px;margin-bottom:24px;
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;
+  line-height:1.9;color:#C0C8DC;overflow-x:auto;
+}
+.tree .dir{color:var(--blue)}
+.tree .file-a{color:var(--accent)}
+.tree .file-g{color:var(--green)}
+.tree .file-m{color:var(--muted)}
+.tree .cm-t{color:#3D4462;font-style:italic}
+
+/* ── DIFF PREVIEW ── */
+.diff{
+  background:var(--code-bg);border:1px solid var(--border);
+  border-radius:10px;overflow-x:auto;margin-bottom:24px;
+}
+.diff-hdr{
+  background:var(--card);padding:8px 16px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--muted);border-bottom:1px solid var(--border);
+}
+.diff-body{padding:16px 20px}
+.diff-body code{background:none;color:#C0C8DC;font-size:12.5px;line-height:1.8;display:block}
+.diff-add{background:rgba(76,175,125,.10);color:var(--green)}
+.diff-del{background:rgba(240,113,120,.10);color:var(--red)}
+.diff-ctx{color:var(--muted2)}
+
+/* ── MOBILE ── */
+.mbar{
+  display:none;position:sticky;top:0;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:12px 20px;align-items:center;justify-content:space-between;
+  z-index:300;
+}
+.mbar-name{font-family:'Syne',sans-serif;font-weight:800;font-size:20px}
+.mbar-name span{color:var(--accent)}
+#nav-tog{background:none;border:none;color:var(--text);cursor:pointer;font-size:20px;padding:4px;line-height:1}
+#m-nav{
+  display:none;background:var(--surface);
+  border-bottom:1px solid var(--border);padding:12px;
+}
+#m-nav a{
+  display:block;padding:9px 12px;color:var(--muted);
+  font-size:13.5px;border-radius:6px;
+}
+#m-nav a:hover{background:var(--card);color:var(--text);text-decoration:none}
+
+@media(max-width:820px){
+  .sidebar{display:none}
+  .main{margin-left:0}
+  .mbar{display:flex}
+  .hero{padding:48px 24px 40px}
+  .vstrip{padding:12px 24px}
+  .content{padding:40px 24px 80px}
+  .hero::after{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<!-- Mobile -->
+<div class="mbar">
+  <div class="mbar-name">H<span>e</span>rz</div>
+  <button id="nav-tog" aria-label="Menu">☰</button>
+</div>
+<div id="m-nav">
+  <a href="#intro">Introduction</a>
+  <a href="#quickstart">Quick Start</a>
+  <a href="#project-structure">Project Structure</a>
+  <a href="#versions">Version Support</a>
+  <a href="#stubs">Stubs</a>
+  <a href="#mixins">Mixins</a>
+  <a href="#events">Event Bus</a>
+  <a href="#packages">Packages</a>
+  <a href="#teavm">TeaVM Targets</a>
+  <a href="#webgui">WebGUI</a>
+  <a href="#api">Registry API</a>
+  <a href="#publish">Publishing</a>
+  <a href="#cli">CLI Reference</a>
+</div>
+
+<div style="display:flex">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-mark">H</div>
+      <div>
+        <div class="sb-name">Herz</div>
+        <div class="sb-sub">v0.0.0 · Admanatine</div>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-grp">
+        <div class="nav-lbl">Overview</div>
+        <a class="nav-a" href="#intro"><span class="dot"></span>Introduction</a>
+        <a class="nav-a" href="#quickstart"><span class="dot"></span>Quick Start</a>
+        <a class="nav-a" href="#project-structure"><span class="dot"></span>Project Structure</a>
+      </div>
+      <div class="nav-grp">
+        <div class="nav-lbl">Build System</div>
+        <a class="nav-a" href="#versions"><span class="dot"></span>Version Support</a>
+        <a class="nav-a" href="#stubs"><span class="dot"></span>EaglerStubs</a>
+        <a class="nav-a" href="#teavm"><span class="dot"></span>TeaVM Targets</a>
+        <a class="nav-a" href="#gradle-dsl"><span class="dot"></span>Gradle DSL</a>
+      </div>
+      <div class="nav-grp">
+        <div class="nav-lbl">Mod API</div>
+        <a class="nav-a" href="#mixins"><span class="dot"></span>Mixins</a>
+        <a class="nav-a" href="#events"><span class="dot"></span>Event Bus</a>
+        <a class="nav-a" href="#packages"><span class="dot"></span>Package Format</a>
+        <a class="nav-a" href="#webgui"><span class="dot"></span>WebGUI</a>
+      </div>
+      <div class="nav-grp">
+        <div class="nav-lbl">Registry</div>
+        <a class="nav-a" href="#api"><span class="dot"></span>REST API</a>
+        <a class="nav-a" href="#publish"><span class="dot"></span>Publishing</a>
+        <a class="nav-a" href="#cli"><span class="dot"></span>CLI Reference</a>
+      </div>
+    </nav>
+    <div class="sb-foot">
+      <a href="https://github.com/Admanatine">GitHub</a> · <a href="https://github.com/Admanatine/Herz/issues">Issues</a><br>
+      <span style="color:var(--muted2);margin-top:4px;display:block">MIT License · Admanatine</span>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <section class="hero" id="intro">
+      <div class="hero-tag">Eaglercraft Mod SDK</div>
+      <h1>Browser mods,<br><em>done right.</em></h1>
+      <p class="hero-sub">Herz is a package and build system for Eaglercraft modding. Write once against a stable API, compile to JavaScript or WebAssembly, and ship as a self-contained <code>.hpckg</code> file — no runtime installation required.</p>
+      <div class="hero-btns">
+        <a class="btn btn-a" href="#quickstart">Get Started</a>
+        <a class="btn btn-b" href="https://github.com/Admanatine/Herz-Prototype">View Example</a>
+        <a class="btn btn-b" href="#api">API Docs</a>
+      </div>
+    </section>
+
+    <div class="vstrip">
+      <span class="vbadge"><span class="vdot g"></span>Eaglercraft 1.8.8 u53</span>
+      <span class="vbadge"><span class="vdot a"></span>Eaglercraft 1.12.2 u1</span>
+      <span class="vbadge"><span class="vdot g"></span>TeaVM JS + WASM-GC</span>
+      <span class="vbadge"><span class="vdot g"></span>Gradle Kotlin DSL</span>
+      <span class="vbadge"><span class="vdot g"></span>SpongePowered ASM Mixins</span>
+    </div>
+
+    <div class="content">
+
+      <!-- ── Introduction ── -->
+      <section id="intro">
+        <div class="eyebrow">Introduction</div>
+        <h2>What is Herz?</h2>
+        <p>Herz (<em>German for "heart"</em>) is the core infrastructure for Eaglercraft modding. It provides a build pipeline, a package format, a runtime loader, and a stable Java API — abstracting away the differences between Eaglercraft 1.8 and 1.12, and between JavaScript and WebAssembly compilation targets.</p>
+
+        <p>A Herz mod consists of:</p>
+        <ul>
+          <li><strong>A common Java module</strong> — your mod logic, written against the Herz API</li>
+          <li><strong>Platform submodules</strong> — thin wrappers for desktop (LWJGL), TeaVM JS, and TeaVM WASM-GC</li>
+          <li><strong>A manifest</strong> — <code>herz-manifest.json</code> describing the package for the runtime loader</li>
+        </ul>
+
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-icon">📦</div>
+            <h4>Package System</h4>
+            <p>Mods are distributed as <code>.hpckg</code> archives — a ZIP containing compiled classes, resources, and a manifest. The runtime loads them at startup with no additional setup.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔀</div>
+            <h4>Bytecode Mixins</h4>
+            <p>Hook into any Minecraft or Eaglercraft class via SpongePowered ASM. Declare targets in <code>mixin-targets.json</code>; Herz applies transforms before the class is first used.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">⚡</div>
+            <h4>Multi-Platform</h4>
+            <p>One source, four outputs: <strong>common</strong>, <strong>desktop</strong> (LWJGL), <strong>teavm-js</strong>, <strong>teavm-wasm_gc</strong>. Build them all with a single Gradle task.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌐</div>
+            <h4>Registry API</h4>
+            <p>Publish and resolve packages via a REST API — no local Herz installation needed. Curl your package into the registry; Herz pulls it at load time.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🛡️</div>
+            <h4>EaglerStubs</h4>
+            <p>Pre-generated stub JARs give you Eaglercraft's full API surface at compile time — without distributing the Eaglercraft source. Method bodies are stripped; only signatures remain.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🎛️</div>
+            <h4>WebGUI</h4>
+            <p>Overlay browser-rendered HTML on top of the game canvas. Build HUDs, menus, or settings screens in HTML/CSS — Herz bridges the JS ↔ Java boundary for you.</p>
+          </div>
+        </div>
+
+        <div class="callout green">
+          <strong>Supported versions:</strong> Eaglercraft 1.8.8 u53 (stable) and 1.12.2 u1 (new). Both versions share the same Herz API surface; version-specific behavior is isolated to the build configuration.
+        </div>
+      </section>
+
+      <!-- ── Quick Start ── -->
+      <section id="quickstart">
+        <div class="eyebrow">Getting Started</div>
+        <h2>Quick Start</h2>
+        <p>Requirements: <strong>JDK 17+</strong>, <strong>Git</strong>. Gradle is bundled via the wrapper — no global install needed.</p>
+
+        <ol class="steps">
+          <li>
+            <div class="step-n"></div>
+            <div class="step-b">
+              <h4>Clone the prototype</h4>
+              <p>Pick the folder matching your target Eaglercraft version.</p>
+              <pre><code><span class="cm"># Clone the prototype repo</span>
+git clone https://github.com/Admanatine/Herz-Prototype
+cd Herz-Prototype
+
+<span class="cm"># For Eaglercraft 1.8.8 u53</span>
+cd 1.8
+
+<span class="cm"># For Eaglercraft 1.12.2 u1</span>
+cd 1.12</code></pre>
+            </div>
+          </li>
+          <li>
+            <div class="step-n"></div>
+            <div class="step-b">
+              <h4>Add stub JARs (or the Eaglercraft source)</h4>
+              <p>Herz builds against <strong>EaglerStubs</strong> — pre-compiled API surfaces that let you compile without the full Eaglercraft source tree. Download them from <a href="https://github.com/Admanatine/Herz-EaglerStubs">Herz-EaglerStubs</a> and place them in your local Maven cache, or reference the paths directly in <code>build.gradle.kts</code>.</p>
+              <pre><code><span class="cm"># Stubs are in Herz-EaglerStubs, organized by version</span>
+git clone https://github.com/Admanatine/Herz-EaglerStubs
+ls Herz-EaglerStubs/1.8/1_8_8_u53/
+<span class="cm"># base.jar  desktop.jar  javascript.jar  platform-api.jar  wasm_gc.jar</span>
+ls Herz-EaglerStubs/1.12/1_12_2_u1/
+<span class="cm"># base.jar  desktop.jar  javascript.jar  wasm_gc.jar</span></code></pre>
+            </div>
+          </li>
+          <li>
+            <div class="step-n"></div>
+            <div class="step-b">
+              <h4>Write your entrypoint</h4>
+              <p>Edit <code>src/.../bootstrap/ClientInit.java</code>. Herz calls <code>ClientInit.init()</code> after Minecraft finishes initializing.</p>
+              <pre><span class="pre-lang">java</span><code><span class="kw">package</span> net.ada.bootstrap<span class="op">;</span>
+<span class="kw">import</span> net.ada.MyMod<span class="op">;</span>
+
+<span class="kw">public class</span> <span class="ty">ClientInit</span> <span class="op">{</span>
+    <span class="kw">public static void</span> <span class="am">init</span><span class="op">() {</span>
+        <span class="ty">MyMod</span> mod <span class="op">=</span> <span class="kw">new</span> <span class="ty">MyMod</span><span class="op">();</span>
+        mod.<span class="am">onLoad</span><span class="op">();</span>
+    <span class="op">}</span>
+<span class="op">}</span></code></pre>
+            </div>
+          </li>
+          <li>
+            <div class="step-n"></div>
+            <div class="step-b">
+              <h4>Build all platforms</h4>
+              <pre><code>./gradlew buildAllPlatforms</code></pre>
+              <p>This compiles the <code>common</code> module first, then delegates to <code>teavm-js</code>, <code>teavm-wasm_gc</code>, and <code>desktop</code> subprojects. Output lands in each subproject's <code>build/</code> directory.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-n"></div>
+            <div class="step-b">
+              <h4>Load your mod in Eaglercraft</h4>
+              <p>Copy the compiled output (or the assembled <code>.hpckg</code> from Herz-Compile) into Eaglercraft's mod directory. The Herz runtime loader picks it up automatically on next launch.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- ── Project Structure ── -->
+      <section id="project-structure">
+        <div class="eyebrow">Build System</div>
+        <h2>Project Structure</h2>
+        <p>A Herz mod project follows a consistent directory layout. The <code>1.8/</code> and <code>1.12/</code> subfolders of each repo are self-contained Gradle projects for their respective Eaglercraft version.</p>
+
+        <h3>Prototype layout (1.12.2)</h3>
+        <div class="tree">
+<span class="dir">Herz-Prototype/1.12/</span>
+├── <span class="file-a">build.gradle.kts</span>         <span class="cm-t"># root: delegates buildAllPlatforms</span>
+├── <span class="file-a">settings.gradle.kts</span>      <span class="cm-t"># includeBuild("src/eag/1_12_2")</span>
+├── <span class="file-m">gradlew</span> / <span class="file-m">gradlew.bat</span>
+├── <span class="file-m">build-tools/</span>             <span class="cm-t"># mixins-all.jar, compositer, etc.</span>
+└── <span class="dir">src/eag/1_12_2/</span>          <span class="cm-t"># the included build</span>
+    ├── <span class="file-a">build.gradle.kts</span>
+    ├── <span class="file-a">settings.gradle.kts</span>      <span class="cm-t"># includes build-targets/*</span>
+    └── <span class="dir">build-targets/</span>
+        └── <span class="dir">common/</span>
+            ├── <span class="file-a">build.gradle.kts</span>
+            └── <span class="dir">src/main/</span>
+                ├── <span class="dir">java/net/ada/</span>
+                │   ├── <span class="dir">bootstrap/</span>
+                │   │   └── <span class="file-g">ClientInit.java</span>
+                │   └── <span class="dir">mixins/</span>
+                │       ├── <span class="file-g">GuiScreenMixin.java</span>
+                │       └── <span class="file-g">MinecraftMixin.java</span>
+                └── <span class="dir">resources/</span>
+                    └── <span class="file-g">mixin-targets.json</span>
+        </div>
+
+        <h3>Build system layout (1.12.2)</h3>
+        <div class="tree">
+<span class="dir">Herz-1_8-Build/1.12/</span>
+├── <span class="file-a">build.gradle.kts</span>         <span class="cm-t"># root aggregator</span>
+├── <span class="file-a">settings.gradle.kts</span>
+├── <span class="file-a">herz-platform.json</span>       <span class="cm-t"># platform ID + subplatform list</span>
+├── <span class="file-a">gradle.properties</span>
+├── <span class="file-m">gradlew</span> / <span class="file-m">gradlew.bat</span>
+├── <span class="dir">build-tools/</span>             <span class="cm-t"># compositer, compiler jars</span>
+├── <span class="dir">desktop/</span>
+│   └── <span class="file-a">build.gradle.kts</span>     <span class="cm-t"># LWJGL desktop target</span>
+├── <span class="dir">teavm-js/</span>
+│   ├── <span class="file-a">build.gradle.kts</span>     <span class="cm-t"># TeaVM JS target</span>
+│   └── <span class="dir">javascript/</span>          <span class="cm-t"># HTML shell + prebuilt assets</span>
+└── <span class="dir">teavm-wasm_gc/</span>
+    ├── <span class="file-a">build.gradle.kts</span>     <span class="cm-t"># TeaVM WASM-GC target</span>
+    └── <span class="dir">javascript_dist/</span>     <span class="cm-t"># bootstrap.js + index.html</span>
+        </div>
+      </section>
+
+      <!-- ── Version Support ── -->
+      <section id="versions">
+        <div class="eyebrow">Build System</div>
+        <h2>Version Support</h2>
+        <p>Herz targets two Eaglercraft versions. The build configuration differs in TeaVM versions, package layouts, and available platform APIs. All differences are isolated to the version-specific folders.</p>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Property</th><th>1.8.8 u53</th><th>1.12.2 u1</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="mono">platform ID</td><td>eagler/1_8_8</td><td>eagler/1_12_2</td></tr>
+              <tr><td class="mono">herzVersion</td><td>0.0.0</td><td>0.0.0</td></tr>
+              <tr><td class="mono">TeaVM JS</td><td>0.9.2</td><td>0.9.2</td></tr>
+              <tr><td class="mono">TeaVM WASM-GC</td><td>0.12.1-EAGLER-R3</td><td>0.11.0-EAGLER-R1</td></tr>
+              <tr><td class="mono">Minecraft class</td><td>net.minecraft.client.Minecraft (v1_8)</td><td>net.minecraft.client.Minecraft</td></tr>
+              <tr><td class="mono">platform-api</td><td>separate jar</td><td>bundled in base</td></tr>
+              <tr><td class="mono">desktop main</td><td>...lwjgl.MainClass</td><td>...internal.MainClass</td></tr>
+              <tr><td class="mono">wasm-gc source dir</td><td>src/wasm-gc-teavm/java</td><td>src/wasm-gc-teavm/java</td></tr>
+              <tr><td class="mono">stubs path</td><td>1.8/1_8_8_u53/</td><td>1.12/1_12_2_u1/</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>herz-platform.json</h3>
+        <p>Each version folder carries a <code>herz-platform.json</code> that the Herz runtime uses to resolve packages and the build system uses to configure subprojects:</p>
+        <pre><span class="pre-lang">json</span><code>{
+  <span class="prop">"platform"</span><span class="op">:</span> <span class="str">"eagler/1_12_2"</span><span class="op">,</span>
+  <span class="prop">"herzVersion"</span><span class="op">:</span> <span class="str">"0.0.0"</span><span class="op">,</span>
+  <span class="prop">"version"</span><span class="op">:</span> <span class="str">"u1"</span><span class="op">,</span>
+  <span class="prop">"author"</span><span class="op">:</span> <span class="str">"lax1dude"</span><span class="op">,</span>
+  <span class="prop">"subplatforms"</span><span class="op">:</span> <span class="op">{</span>
+    <span class="prop">"desktop"</span><span class="op">:</span>      <span class="str">"desktop"</span><span class="op">,</span>
+    <span class="prop">"common"</span><span class="op">:</span>       <span class="str">""</span><span class="op">,</span>
+    <span class="prop">"teavm-wasm_gc"</span><span class="op">:</span> <span class="str">"teavm-wasm_gc"</span><span class="op">,</span>
+    <span class="prop">"teavm-js"</span><span class="op">:</span>     <span class="str">"teavm-js"</span>
+  <span class="op">}</span>
+<span class="op">}</span></code></pre>
+      </section>
+
+      <!-- ── EaglerStubs ── -->
+      <section id="stubs">
+        <div class="eyebrow">Build System</div>
+        <h2>EaglerStubs</h2>
+        <p>EaglerStubs are stub JARs generated from the Eaglercraft source tree using <strong>JarStubGenerator</strong>. Method bodies are stripped — only class signatures, field declarations, and method signatures remain. This lets you compile against Eaglercraft's API without distributing the source.</p>
+
+        <h3>Available stubs</h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>JAR</th><th>Contents</th><th>1.8.8 u53</th><th>1.12.2 u1</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="mono">base.jar</td>
+                <td>main + game + protocol-game sources</td>
+                <td class="ok">✓</td><td class="ok">✓</td>
+              </tr>
+              <tr>
+                <td class="mono">desktop.jar</td>
+                <td>base + lwjgl sources</td>
+                <td class="ok">✓</td><td class="ok">✓</td>
+              </tr>
+              <tr>
+                <td class="mono">javascript.jar</td>
+                <td>base + teavm-js platform</td>
+                <td class="ok">✓</td><td class="warn">copy of base*</td>
+              </tr>
+              <tr>
+                <td class="mono">wasm_gc.jar</td>
+                <td>base + wasm-gc-teavm platform</td>
+                <td class="ok">✓</td><td class="warn">copy of base*</td>
+              </tr>
+              <tr>
+                <td class="mono">platform-api.jar</td>
+                <td>1.8-specific platform API</td>
+                <td class="ok">✓</td><td style="color:var(--muted2)">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:12.5px;color:var(--muted)">* 1.12.2 js/wasm_gc stubs are copies of base because the TeaVM eagler fork JARs (<code>org.teavm.platform</code>, <code>org.teavm.interop</code>) are not published to Maven Central — they're compiled from Eaglercraft source at build time.</p>
+
+        <h3>Generating your own stubs</h3>
+        <p>Use <strong>JarStubGenerator</strong> (in <code>Herz-EaglerStubs/1.8/stubber/</code>) to produce stubs from any JAR or source tree:</p>
+        <pre><span class="pre-lang">bash</span><code><span class="cm"># Generate stubs from a compiled JAR</span>
+java -jar JarStubGenerator-1.1.0.jar \
+  -f mylib.jar \
+  -out ./stubs/
+
+<span class="cm"># The output JAR has identical class/method signatures,</span>
+<span class="cm"># but all method bodies are replaced with throw stubs.</span></code></pre>
+
+        <h3>Using stubs in your build</h3>
+        <pre><span class="pre-lang">kts</span><code><span class="cm">// build.gradle.kts (common subproject)</span>
+dependencies {
+    compileOnly(files(<span class="str">"../../../stubs/1.12/1_12_2_u1/base.jar"</span>))
+    compileOnly(files(<span class="str">"../../../stubs/1.12/1_12_2_u1/desktop.jar"</span>))
+}</code></pre>
+      </section>
+
+      <!-- ── Mixins ── -->
+      <section id="mixins">
+        <div class="eyebrow">Mod API</div>
+        <h2>Mixins</h2>
+        <p>Mixins are the primary way to hook into Minecraft and Eaglercraft internals. Herz uses <strong>SpongePowered ASM</strong> (via the classtransform library) to apply bytecode transforms before classes are first loaded by the JVM.</p>
+
+        <h3>Declaring mixin targets</h3>
+        <p>List your mixin classes in <code>src/main/resources/mixin-targets.json</code>:</p>
+        <pre><span class="pre-lang">json</span><code>{
+  <span class="prop">"mixins"</span><span class="op">:</span> <span class="op">[</span>
+    <span class="str">"net.ada.mixins.GuiScreenMixin"</span><span class="op">,</span>
+    <span class="str">"net.ada.mixins.MinecraftMixin"</span>
+  <span class="op">]</span>
+<span class="op">}</span></code></pre>
+
+        <h3>Injecting into a method</h3>
+        <p><code>@Inject</code> runs your code at a specific point in a target method. <code>HEAD</code> runs before the first bytecode instruction; <code>TAIL</code> runs just before every return.</p>
+        <pre><span class="pre-lang">java</span><code><span class="am">@Mixin</span><span class="op">(</span><span class="ty">Minecraft</span><span class="op">.</span><span class="kw">class</span><span class="op">)</span>
+<span class="kw">public class</span> <span class="ty">MinecraftMixin</span> <span class="op">{</span>
+
+    <span class="cm">// Runs after startGame() finishes — game is fully loaded</span>
+    <span class="am">@Inject</span><span class="op">(</span>method <span class="op">=</span> <span class="str">"startGame"</span><span class="op">,</span> at <span class="op">=</span> <span class="am">@At</span><span class="op">(</span><span class="str">"TAIL"</span><span class="op">))</span>
+    <span class="kw">private void</span> <span class="am">herz$onMinecraftInit</span><span class="op">(</span><span class="ty">CallbackInfo</span> ci<span class="op">) {</span>
+        <span class="ty">Client</span><span class="op">.</span>INSTANCE<span class="op">.</span><span class="am">getEventBus</span><span class="op">().</span><span class="am">fireEvent</span><span class="op">(</span>
+            <span class="ty">MinecraftInitEvent</span><span class="op">.</span><span class="kw">class</span><span class="op">,</span>
+            <span class="kw">new</span> <span class="ty">MinecraftInitEvent</span><span class="op">()</span>
+        <span class="op">);</span>
+    <span class="op">}</span>
+
+    <span class="cm">// Runs at the start of every game tick</span>
+    <span class="am">@Inject</span><span class="op">(</span>method <span class="op">=</span> <span class="str">"runTick"</span><span class="op">,</span> at <span class="op">=</span> <span class="am">@At</span><span class="op">(</span><span class="str">"HEAD"</span><span class="op">))</span>
+    <span class="kw">private void</span> <span class="am">herz$onTick</span><span class="op">(</span><span class="ty">CallbackInfo</span> ci<span class="op">) {</span>
+        <span class="ty">Client</span><span class="op">.</span>INSTANCE<span class="op">.</span><span class="am">getEventBus</span><span class="op">().</span><span class="am">fireEvent</span><span class="op">(</span>
+            <span class="ty">TickEvent</span><span class="op">.</span><span class="kw">class</span><span class="op">,</span> <span class="kw">new</span> <span class="ty">TickEvent</span><span class="op">()</span>
+        <span class="op">);</span>
+    <span class="op">}</span>
+<span class="op">}</span></code></pre>
+
+        <h3>Redirecting method calls</h3>
+        <p><code>@Redirect</code> replaces a specific method call inside a target method with your own implementation. Useful for intercepting input or rendering calls.</p>
+        <pre><span class="pre-lang">java</span><code><span class="am">@Mixin</span><span class="op">(</span><span class="ty">GuiScreen</span><span class="op">.</span><span class="kw">class</span><span class="op">)</span>
+<span class="kw">public class</span> <span class="ty">GuiScreenMixin</span> <span class="op">{</span>
+
+    <span class="cm">// Intercept keyboard polling inside handleInput()</span>
+    <span class="am">@Redirect</span><span class="op">(</span>
+        method <span class="op">=</span> <span class="str">"handleInput"</span><span class="op">,</span>
+        at <span class="op">=</span> <span class="am">@At</span><span class="op">(</span>value <span class="op">=</span> <span class="str">"INVOKE"</span><span class="op">,</span>
+            target <span class="op">=</span> <span class="str">"Lnet/lax1dude/eaglercraft/Keyboard;next()Z"</span><span class="op">)</span>
+    <span class="op">)</span>
+    <span class="kw">private boolean</span> <span class="am">herz$onKeyboardNext</span><span class="op">() {</span>
+        <span class="kw">boolean</span> result <span class="op">=</span> <span class="ty">Keyboard</span><span class="op">.</span><span class="am">next</span><span class="op">();</span>
+        <span class="cm">// your interception logic here</span>
+        <span class="kw">return</span> result<span class="op">;</span>
+    <span class="op">}</span>
+<span class="op">}</span></code></pre>
+
+        <h3>Package differences by version</h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Class</th><th>1.8.8 u53 package</th><th>1.12.2 u1 package</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">Keyboard</td><td>net.lax1dude.eaglercraft.v1_8.Keyboard</td><td>net.lax1dude.eaglercraft.Keyboard</td></tr>
+              <tr><td class="mono">Mouse</td><td>net.lax1dude.eaglercraft.v1_8.Mouse</td><td>net.lax1dude.eaglercraft.Mouse</td></tr>
+              <tr><td class="mono">Minecraft</td><td>net.minecraft.client.Minecraft (v1_8 fork)</td><td>net.minecraft.client.Minecraft</td></tr>
+              <tr><td class="mono">GuiScreen</td><td>net.minecraft.client.gui.GuiScreen</td><td>net.minecraft.client.gui.GuiScreen</td></tr>
+              <tr><td class="mono">PlatformRuntime</td><td>...v1_8.opengl.EaglercraftGPU</td><td>...internal.PlatformRuntime</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <strong>Naming convention:</strong> Always prefix mixin methods with <code>herz$</code> (e.g. <code>herz$onTick</code>) to avoid conflicts with other mods targeting the same class.
+        </div>
+      </section>
+
+      <!-- ── Events ── -->
+      <section id="events">
+        <div class="eyebrow">Mod API</div>
+        <h2>Event Bus</h2>
+        <p>Herz-Core ships a lightweight event bus. Mixins fire events; your mod code subscribes to them. No reflection at runtime — events are dispatched by direct method reference.</p>
+
+        <h3>Built-in events</h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Event class</th><th>Fired when</th><th>Mixin source</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="mono">MinecraftInitEvent</td>
+                <td>Minecraft.startGame() returns (TAIL)</td>
+                <td class="mono">MinecraftMixin</td>
+              </tr>
+              <tr>
+                <td class="mono">TickEvent</td>
+                <td>Start of each Minecraft.runTick() call</td>
+                <td class="mono">MinecraftMixin</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Subscribing to events</h3>
+        <pre><span class="pre-lang">java</span><code><span class="kw">import</span> net.ada.api.eventbus.EventBus<span class="op">;</span>
+<span class="kw">import</span> net.ada.api.eventbus.events.impl.core.<span class="op">*;</span>
+
+<span class="kw">public class</span> <span class="ty">MyMod</span> <span class="op">{</span>
+
+    <span class="kw">public void</span> <span class="am">onLoad</span><span class="op">() {</span>
+        <span class="ty">EventBus</span> bus <span class="op">=</span> <span class="ty">Client</span><span class="op">.</span>INSTANCE<span class="op">.</span><span class="am">getEventBus</span><span class="op">();</span>
+
+        bus<span class="op">.</span><span class="am">subscribe</span><span class="op">(</span><span class="ty">MinecraftInitEvent</span><span class="op">.</span><span class="kw">class</span><span class="op">,</span> <span class="kw">this</span><span class="op">::</span>onInit<span class="op">);</span>
+        bus<span class="op">.</span><span class="am">subscribe</span><span class="op">(</span><span class="ty">TickEvent</span><span class="op">.</span><span class="kw">class</span><span class="op">,</span>          <span class="kw">this</span><span class="op">::</span>onTick<span class="op">);</span>
+    <span class="op">}</span>
+
+    <span class="kw">private void</span> <span class="am">onInit</span><span class="op">(</span><span class="ty">MinecraftInitEvent</span> e<span class="op">) {</span>
+        <span class="cm">// Game is fully loaded — safe to access Minecraft.getMinecraft()</span>
+    <span class="op">}</span>
+
+    <span class="kw">private void</span> <span class="am">onTick</span><span class="op">(</span><span class="ty">TickEvent</span> e<span class="op">) {</span>
+        <span class="cm">// Runs every game tick (~20/sec)</span>
+    <span class="op">}</span>
+<span class="op">}</span></code></pre>
+
+        <h3>Firing custom events</h3>
+        <pre><span class="pre-lang">java</span><code><span class="cm">// Define your event</span>
+<span class="kw">public class</span> <span class="ty">PlayerJumpEvent</span> <span class="kw">extends</span> <span class="ty">HerzEvent</span> <span class="op">{</span>
+    <span class="kw">public final double</span> motionY<span class="op">;</span>
+    <span class="kw">public</span> <span class="ty">PlayerJumpEvent</span><span class="op">(</span><span class="kw">double</span> motionY<span class="op">) {</span>
+        <span class="kw">this</span><span class="op">.</span>motionY <span class="op">=</span> motionY<span class="op">;</span>
+    <span class="op">}</span>
+<span class="op">}</span>
+
+<span class="cm">// Fire it from a mixin</span>
+<span class="ty">Client</span><span class="op">.</span>INSTANCE<span class="op">.</span><span class="am">getEventBus</span><span class="op">().</span><span class="am">fireEvent</span><span class="op">(</span>
+    <span class="ty">PlayerJumpEvent</span><span class="op">.</span><span class="kw">class</span><span class="op">,</span>
+    <span class="kw">new</span> <span class="ty">PlayerJumpEvent</span><span class="op">(</span>player<span class="op">.</span>motionY<span class="op">)</span>
+<span class="op">);</span></code></pre>
+      </section>
+
+      <!-- ── Package Format ── -->
+      <section id="packages">
+        <div class="eyebrow">Mod API</div>
+        <h2>Package Format (<code>.hpckg</code>)</h2>
+        <p>A Herz package is a ZIP archive with a <code>.hpckg</code> extension. It contains all compiled classes, resources, and a manifest. The runtime loader reads the manifest, applies mixins, and calls your entrypoint.</p>
+
+        <h3>Archive layout</h3>
+        <div class="tree">
+mymod-1.0.hpckg  <span class="cm-t">(ZIP)</span>
+├── <span class="file-a">herz-manifest.json</span>    <span class="cm-t"># required: package metadata</span>
+├── <span class="file-m">mixin-targets.json</span>    <span class="cm-t"># optional: mixin class list</span>
+├── <span class="dir">classes/</span>              <span class="cm-t"># compiled .class files, preserving package structure</span>
+│   └── net/ada/mymod/...
+└── <span class="dir">resources/</span>            <span class="cm-t"># textures, lang files, sounds, etc.</span>
+    ├── assets/mymod/textures/
+    └── lang/
+        </div>
+
+        <h3>herz-manifest.json</h3>
+        <pre><span class="pre-lang">json</span><code>{
+  <span class="prop">"packageName"</span><span class="op">:</span>  <span class="str">"net.ada.mymod"</span><span class="op">,</span>
+  <span class="prop">"version"</span><span class="op">:</span>      <span class="str">"1.0.0"</span><span class="op">,</span>
+  <span class="prop">"authors"</span><span class="op">:</span>     <span class="op">[</span><span class="str">"yourname"</span><span class="op">],</span>
+  <span class="prop">"platform"</span><span class="op">:</span>    <span class="str">"eagler/1_12_2"</span><span class="op">,</span>
+  <span class="prop">"permissions"</span><span class="op">:</span> <span class="op">[],</span>
+  <span class="prop">"entrypoint"</span><span class="op">:</span>  <span class="str">"net.ada.mymod.bootstrap.ClientInit"</span><span class="op">,</span>
+  <span class="prop">"description"</span><span class="op">:</span> <span class="str">"My first Herz mod"</span>
+<span class="op">}</span></code></pre>
+
+        <h3>Manifest fields</h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">packageName</td><td>string</td><td class="ok">yes</td><td>Reverse-domain package identifier. Must be unique in the registry.</td></tr>
+              <tr><td class="mono">version</td><td>string</td><td class="ok">yes</td><td>Semver version string.</td></tr>
+              <tr><td class="mono">authors</td><td>string[]</td><td class="ok">yes</td><td>List of author names.</td></tr>
+              <tr><td class="mono">platform</td><td>string</td><td class="ok">yes</td><td><code>eagler/1_8_8</code> or <code>eagler/1_12_2</code></td></tr>
+              <tr><td class="mono">permissions</td><td>string[]</td><td class="ok">yes</td><td>Runtime permissions requested. Currently unused; pass <code>[]</code>.</td></tr>
+              <tr><td class="mono">entrypoint</td><td>string</td><td class="ok">yes</td><td>Fully qualified class name with a public static <code>init()</code> method.</td></tr>
+              <tr><td class="mono">description</td><td>string</td><td style="color:var(--muted2)">no</td><td>Short description shown in the registry.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Assembling a package</h3>
+        <p>Use <strong>Herz-Compile</strong> to assemble the <code>.hpckg</code>. It compiles all platform targets, packages classes + resources, and signs the archive:</p>
+        <pre><code>./gradlew assembleHpckg
+
+ls build/herz/
+<span class="cm"># mymod-1.0.hpckg</span></code></pre>
+      </section>
+
+      <!-- ── TeaVM ── -->
+      <section id="teavm">
+        <div class="eyebrow">Build System</div>
+        <h2>TeaVM Targets</h2>
+        <p>Herz produces browser-runnable output via <strong>TeaVM</strong> — a Java-to-JavaScript and Java-to-WebAssembly compiler. The eagler fork of TeaVM includes custom runtime classes (<code>org.teavm.platform</code>, <code>org.teavm.jso</code>) that bridge to Eaglercraft's browser environment.</p>
+
+        <h3>teavm-js</h3>
+        <p>Compiles the entire Java codebase to a single <code>classes.js</code> file. The JS runtime is fastest to start and most compatible but produces larger files.</p>
+
+        <pre><span class="pre-lang">kts</span><code><span class="cm">// teavm-js/build.gradle.kts (1.8.8 u53)</span>
+plugins {
+    id(<span class="str">"java"</span>)
+    id(<span class="str">"org.teavm"</span>) version <span class="str">"0.9.2"</span>
+}
+dependencies {
+    implementation(project(<span class="str">":common"</span>))
+    teavm(<span class="str">"org.teavm:teavm-core:0.9.2"</span>)
+    teavm(<span class="str">"org.teavm:teavm-classlib:0.9.2"</span>)
+    <span class="cm">// Eagler stubs provide JSO bindings</span>
+    compileOnly(files(<span class="str">"../../stubs/1.8/1_8_8_u53/javascript.jar"</span>))
+}</code></pre>
+
+        <h3>teavm-wasm_gc</h3>
+        <p>Compiles to WebAssembly GC — a newer WASM feature that enables garbage-collected objects. Startup is slower than JS but runtime performance is significantly better. The eagler fork version differs between Eaglercraft versions:</p>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Eaglercraft version</th><th>WASM-GC TeaVM fork</th><th>Gradle plugin ID</th></tr></thead>
+            <tbody>
+              <tr><td>1.8.8 u53</td><td class="mono">0.12.1-EAGLER-R3</td><td class="mono">org.teavm.wasm-gc</td></tr>
+              <tr><td>1.12.2 u1</td><td class="mono">0.11.0-EAGLER-R1</td><td class="mono">org.teavm.wasm-gc</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <pre><span class="pre-lang">kts</span><code><span class="cm">// teavm-wasm_gc/build.gradle.kts (1.12.2 u1)</span>
+plugins {
+    id(<span class="str">"java"</span>)
+    id(<span class="str">"org.teavm.wasm-gc"</span>) version <span class="str">"0.11.0-EAGLER-R1"</span>
+}
+sourceSets {
+    named(<span class="str">"main"</span>) {
+        java.srcDirs(<span class="str">"src/wasm-gc-teavm/java"</span>)
+    }
+}
+dependencies {
+    implementation(project(<span class="str">":common"</span>))
+    compileOnly(files(<span class="str">"../../stubs/1.12/1_12_2_u1/wasm_gc.jar"</span>))
+}</code></pre>
+
+        <div class="callout blue">
+          <strong>Source directories:</strong> The WASM-GC subproject has its own Java source directory (<code>src/wasm-gc-teavm/java</code>) for any WASM-specific glue code. Platform-agnostic logic lives in the <code>common</code> subproject.
+        </div>
+
+        <h3>desktop (LWJGL)</h3>
+        <p>The desktop target compiles for the LWJGL-based Eaglercraft desktop client. It is not browser-deployable but is useful for development and testing without a browser.</p>
+        <pre><span class="pre-lang">kts</span><code><span class="cm">// desktop/build.gradle.kts (1.12.2 u1)</span>
+application {
+    mainClass.set(<span class="str">"net.lax1dude.eaglercraft.internal.MainClass"</span>)
+    <span class="cm">// 1.8.8 uses: net.lax1dude.eaglercraft.lwjgl.MainClass</span>
+}
+dependencies {
+    implementation(project(<span class="str">":common"</span>))
+    compileOnly(files(<span class="str">"../../stubs/1.12/1_12_2_u1/desktop.jar"</span>))
+    runtimeOnly(fileTree(<span class="str">"desktopRuntime"</span>) { include(<span class="str">"*.jar"</span>) })
+}</code></pre>
+      </section>
+
+      <!-- ── WebGUI ── -->
+      <section id="webgui">
+        <div class="eyebrow">Mod API</div>
+        <h2>WebGUI</h2>
+        <p>Herz-WebGUI lets you render browser-native HTML/CSS overlays on top of the game canvas. Useful for custom HUDs, mod settings screens, or any UI that's easier to build in HTML than in Minecraft's immediate-mode rendering.</p>
+
+        <h3>How it works</h3>
+        <ul>
+          <li>The WebGUI module creates a transparent <code>&lt;div&gt;</code> overlay on top of the Eaglercraft canvas.</li>
+          <li>Your Java code calls <code>WebGUI.show(String htmlContent)</code> to inject HTML.</li>
+          <li>JavaScript events (button clicks, form inputs) are bridged back to Java via a message channel.</li>
+          <li>The overlay is hidden when the game is in a fullscreen 3D view and shown when a menu is open.</li>
+        </ul>
+
+        <h3>Basic usage</h3>
+        <pre><span class="pre-lang">java</span><code><span class="cm">// Show an HTML overlay</span>
+<span class="ty">WebGUI</span><span class="op">.</span><span class="am">show</span><span class="op">(</span><span class="str">"""
+    &lt;div id="mymod-hud"&gt;
+        &lt;span id="score"&gt;Score: 0&lt;/span&gt;
+    &lt;/div&gt;
+    """</span><span class="op">);</span>
+
+<span class="cm">// Update a value without re-rendering the whole overlay</span>
+<span class="ty">WebGUI</span><span class="op">.</span><span class="am">eval</span><span class="op">(</span><span class="str">"document.getElementById('score').textContent = 'Score: " </span><span class="op">+</span> score <span class="op">+</span> <span class="str">"'"</span><span class="op">);</span>
+
+<span class="cm">// Hide the overlay</span>
+<span class="ty">WebGUI</span><span class="op">.</span><span class="am">hide</span><span class="op">();</span></code></pre>
+
+        <div class="callout">
+          <strong>Security note:</strong> WebGUI overlays run in the same browser context as the game. Sanitize any player-supplied content before injecting it into HTML to avoid XSS.
+        </div>
+      </section>
+
+      <!-- ── Gradle DSL ── -->
+      <section id="gradle-dsl">
+        <div class="eyebrow">Build System</div>
+        <h2>Gradle DSL Reference</h2>
+        <p>All Herz build files use the <strong>Gradle Kotlin DSL</strong> (<code>.gradle.kts</code>). The root build delegates to an included build containing the actual platform subprojects.</p>
+
+        <h3>Root settings.gradle.kts</h3>
+        <pre><span class="pre-lang">kts</span><code>rootProject.name <span class="op">=</span> <span class="str">"Herz-1_12"</span>
+
+<span class="cm">// Include the versioned Eaglercraft build as a composite build</span>
+<span class="am">includeBuild</span><span class="op">(</span><span class="str">"src/eag/1_12_2"</span><span class="op">)</span></code></pre>
+
+        <h3>Root build.gradle.kts</h3>
+        <pre><span class="pre-lang">kts</span><code>plugins { id(<span class="str">"java"</span>) }
+
+<span class="kw">val</span> buildEagler1122 <span class="op">=</span> tasks<span class="op">.</span><span class="am">register</span><span class="op">(</span><span class="str">"buildAllPlatforms"</span><span class="op">) {</span>
+    group <span class="op">=</span> <span class="str">"build"</span>
+    description <span class="op">=</span> <span class="str">"Builds all platform targets"</span>
+    <span class="am">dependsOn</span><span class="op">(</span>gradle<span class="op">.</span><span class="am">includedBuild</span><span class="op">(</span><span class="str">"1_12_2"</span><span class="op">).</span><span class="am">task</span><span class="op">(</span><span class="str">":buildAllPlatforms"</span><span class="op">))</span>
+<span class="op">}</span>
+
+tasks<span class="op">.</span><span class="am">named</span><span class="op">(</span><span class="str">"build"</span><span class="op">) {</span> <span class="am">dependsOn</span><span class="op">(</span>buildEagler1122<span class="op">) }</span></code></pre>
+
+        <h3>Common subproject build.gradle.kts</h3>
+        <pre><span class="pre-lang">kts</span><code>plugins { id(<span class="str">"java"</span>) }
+
+group   <span class="op">=</span> <span class="str">"dev.admanatine"</span>
+version <span class="op">=</span> <span class="str">"1.0-SNAPSHOT"</span>
+
+sourceSets {
+    <span class="am">named</span><span class="op">(</span><span class="str">"main"</span><span class="op">) {</span>
+        <span class="cm">// 1.12.2: eag source dirs (no platform-api/ needed)</span>
+        java<span class="op">.</span><span class="am">srcDirs</span><span class="op">(</span>
+            <span class="str">"eagler-source/eag-1_12/src/main/java"</span><span class="op">,</span>
+            <span class="str">"eagler-source/eag-1_12/src/game/java"</span><span class="op">,</span>
+            <span class="str">"eagler-source/eag-1_12/src/protocol-game/java"</span><span class="op">,</span>
+            <span class="str">"src/api/java"</span>
+        <span class="op">)</span>
+    <span class="op">}</span>
+<span class="op">}</span>
+
+dependencies {
+    <span class="cm">// Stubs for compilation only; Eaglercraft provides them at runtime</span>
+    <span class="am">compileOnly</span><span class="op">(</span><span class="am">fileTree</span><span class="op">(</span><span class="str">"stubs"</span><span class="op">) { include(</span><span class="str">"*.jar"</span><span class="op">) })</span>
+<span class="op">}</span></code></pre>
+      </section>
+
+      <!-- ── REST API ── -->
+      <section id="api">
+        <div class="eyebrow">Registry</div>
+        <h2>Registry API</h2>
+        <p>The Herz package registry is a REST API backed by <strong>Vercel serverless functions</strong> and <strong>Supabase Postgres</strong>. Use it to search for packages, resolve dependencies, and publish new releases — no local tooling required.</p>
+
+        <h3>Base URL</h3>
+        <pre><code>https://herz-api.vercel.app/api</code></pre>
+
+        <hr>
+
+        <h3>Endpoints</h3>
+
+        <div class="ep">
+          <div class="ep-line"><span class="m get">GET</span><span class="ep-path">/packages</span></div>
+          <div class="ep-desc">List or search packages.</div>
+          <div class="ep-params">
+            <div class="param"><span class="pname">name</span><span class="ptype">string?</span><span class="pdesc">Filter by package name (partial match)</span></div>
+            <div class="param"><span class="pname">platform</span><span class="ptype">string?</span><span class="pdesc"><code>eagler/1_8_8</code> or <code>eagler/1_12_2</code></span></div>
+            <div class="param"><span class="pname">author</span><span class="ptype">string?</span><span class="pdesc">Filter by author name</span></div>
+            <div class="param"><span class="pname">limit</span><span class="ptype">number?</span><span class="pdesc">Results per page (default 20, max 100)</span></div>
+            <div class="param"><span class="pname">page</span><span class="ptype">number?</span><span class="pdesc">Page number (1-indexed)</span></div>
+          </div>
+        </div>
+
+        <div class="ep">
+          <div class="ep-line"><span class="m post">POST</span><span class="ep-path">/packages</span></div>
+          <div class="ep-desc">Publish a new package. Requires <code>Authorization: Bearer &lt;token&gt;</code>.</div>
+          <div class="ep-params">
+            <div class="param"><span class="pname">package_name</span><span class="ptype">string</span><span class="pdesc">Reverse-domain package identifier</span></div>
+            <div class="param"><span class="pname">package_version</span><span class="ptype">string</span><span class="pdesc">Semver version string</span></div>
+            <div class="param"><span class="pname">authors</span><span class="ptype">string[]</span><span class="pdesc">List of author names</span></div>
+            <div class="param"><span class="pname">platform</span><span class="ptype">string</span><span class="pdesc">Target platform ID</span></div>
+            <div class="param"><span class="pname">permissions</span><span class="ptype">string[]</span><span class="pdesc">Requested permissions (pass <code>[]</code> for none)</span></div>
+            <div class="param"><span class="pname">manifest</span><span class="ptype">object?</span><span class="pdesc">Additional manifest fields (stored as JSONB)</span></div>
+          </div>
+        </div>
+
+        <div class="ep">
+          <div class="ep-line"><span class="m get">GET</span><span class="ep-path">/packages/:id</span></div>
+          <div class="ep-desc">Fetch a package by UUID, internal numeric id, or <code>name@version</code> string.</div>
+        </div>
+
+        <div class="ep">
+          <div class="ep-line"><span class="m del">DELETE</span><span class="ep-path">/packages/:id</span></div>
+          <div class="ep-desc">Delete a package. Requires <code>Authorization: Bearer &lt;token&gt;</code>. Same ID formats as GET.</div>
+        </div>
+
+        <hr>
+
+        <h3>Response format</h3>
+        <pre><span class="pre-lang">json</span><code><span class="cm">// GET /packages — success</span>
+<span class="op">{</span>
+  <span class="prop">"packages"</span><span class="op">:</span> <span class="op">[{</span>
+    <span class="prop">"id"</span><span class="op">:</span>              <span class="str">"3fa85f64-5717-4562-b3fc-2c963f66afa6"</span><span class="op">,</span>
+    <span class="prop">"package_name"</span><span class="op">:</span>   <span class="str">"net.ada.mymod"</span><span class="op">,</span>
+    <span class="prop">"package_version"</span><span class="op">:</span><span class="str">"1.0.0"</span><span class="op">,</span>
+    <span class="prop">"authors"</span><span class="op">:</span>        <span class="op">[</span><span class="str">"yourname"</span><span class="op">],</span>
+    <span class="prop">"platform"</span><span class="op">:</span>       <span class="str">"eagler/1_12_2"</span><span class="op">,</span>
+    <span class="prop">"permissions"</span><span class="op">:</span>    <span class="op">[],</span>
+    <span class="prop">"manifest"</span><span class="op">:</span>       <span class="op">{</span> <span class="prop">"entrypoint"</span><span class="op">:</span> <span class="str">"net.ada.mymod.bootstrap.ClientInit"</span> <span class="op">},</span>
+    <span class="prop">"created_at"</span><span class="op">:</span>     <span class="str">"2026-09-01T00:00:00Z"</span>
+  <span class="op">}],</span>
+  <span class="prop">"total"</span><span class="op">:</span> <span class="num">1</span><span class="op">,</span>
+  <span class="prop">"page"</span><span class="op">:</span>  <span class="num">1</span>
+<span class="op">}</span></code></pre>
+
+        <h3>curl examples</h3>
+        <pre><span class="pre-lang">bash</span><code><span class="cm"># List all 1.12 packages</span>
+curl <span class="str">"https://herz-api.vercel.app/api/packages?platform=eagler/1_12_2"</span>
+
+<span class="cm"># Resolve a specific version</span>
+curl <span class="str">"https://herz-api.vercel.app/api/packages/net.ada.mymod@1.0.0"</span>
+
+<span class="cm"># Resolve the latest version by name prefix</span>
+curl <span class="str">"https://herz-api.vercel.app/api/packages?name=net.ada.mymod&amp;limit=1"</span>
+
+<span class="cm"># Search by author</span>
+curl <span class="str">"https://herz-api.vercel.app/api/packages?author=yourname"</span>
+
+<span class="cm"># Publish a package</span>
+curl -X POST \
+  -H <span class="str">"Authorization: Bearer $HERZ_PUBLISH_TOKEN"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"package_name":"net.ada.mymod","package_version":"1.0.0",
+       "authors":["yourname"],"platform":"eagler/1_12_2",
+       "permissions":[],"manifest":{"entrypoint":"net.ada.mymod.bootstrap.ClientInit"}}'</span> \
+  <span class="str">"https://herz-api.vercel.app/api/packages"</span>
+
+<span class="cm"># Delete a package</span>
+curl -X DELETE \
+  -H <span class="str">"Authorization: Bearer $HERZ_PUBLISH_TOKEN"</span> \
+  <span class="str">"https://herz-api.vercel.app/api/packages/net.ada.mymod@1.0.0"</span></code></pre>
+
+        <h3>Database schema</h3>
+        <pre><span class="pre-lang">sql</span><code><span class="kw">CREATE TABLE</span> <span class="ty">packages</span> <span class="op">(</span>
+    id              <span class="ty">UUID</span>        PRIMARY KEY DEFAULT <span class="am">gen_random_uuid</span><span class="op">(),</span>
+    package_name    <span class="ty">TEXT</span>        NOT NULL<span class="op">,</span>
+    package_version <span class="ty">TEXT</span>        NOT NULL<span class="op">,</span>
+    authors         <span class="ty">TEXT[]</span>      NOT NULL DEFAULT <span class="str">'{}'</span><span class="op">,</span>
+    permissions     <span class="ty">TEXT[]</span>      NOT NULL DEFAULT <span class="str">'{}'</span><span class="op">,</span>
+    manifest        <span class="ty">JSONB</span>       NOT NULL DEFAULT <span class="str">'{}'</span><span class="op">,</span>
+    created_at      <span class="ty">TIMESTAMPTZ</span> NOT NULL DEFAULT <span class="am">now</span><span class="op">(),</span>
+
+    UNIQUE <span class="op">(</span>package_name<span class="op">,</span> package_version<span class="op">)</span>
+<span class="op">);</span>
+
+<span class="cm">-- Public read; writes require service-role key</span>
+ALTER TABLE <span class="ty">packages</span> ENABLE ROW LEVEL SECURITY<span class="op">;</span>
+CREATE POLICY <span class="str">"public read"</span>
+  ON <span class="ty">packages</span> FOR SELECT USING (<span class="kw">true</span>)<span class="op">;</span></code></pre>
+      </section>
+
+      <!-- ── Publishing ── -->
+      <section id="publish">
+        <div class="eyebrow">Registry</div>
+        <h2>Publishing a Package</h2>
+        <p>Publishing requires a <code>HERZ_PUBLISH_TOKEN</code> issued by an Admanatine admin. Contact the team on GitHub to request one.</p>
+
+        <ol class="steps">
+          <li>
+            <div class="step-n"></div>
+            <div class="step-b">
+              <h4>Build and assemble</h4>
+              <pre><code>./gradlew assembleHpckg
+ls build/herz/
+<span class="cm"># net.ada.mymod-1.0.0.hpckg</span></code></pre>
+            </div>
+          </li>
+          <li>
+            <div class="step-n"></div>
+            <div class="step-b">
+              <h4>Set your token</h4>
+              <pre><code>export HERZ_PUBLISH_TOKEN=<span class="str">"your_token_here"</span></code></pre>
+            </div>
+          </li>
+          <li>
+            <div class="step-n"></div>
+            <div class="step-b">
+              <h4>Read the manifest</h4>
+              <pre><code>cat build/herz/herz-manifest.json</code></pre>
+            </div>
+          </li>
+          <li>
+            <div class="step-n"></div>
+            <div class="step-b">
+              <h4>POST to the registry</h4>
+              <pre><code>curl -X POST \
+  -H <span class="str">"Authorization: Bearer $HERZ_PUBLISH_TOKEN"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d @build/herz/herz-manifest.json \
+  https://herz-api.vercel.app/api/packages</code></pre>
+            </div>
+          </li>
+          <li>
+            <div class="step-n"></div>
+            <div class="step-b">
+              <h4>Verify</h4>
+              <pre><code>curl <span class="str">"https://herz-api.vercel.app/api/packages/net.ada.mymod@1.0.0"</span></code></pre>
+            </div>
+          </li>
+        </ol>
+
+        <div class="callout">
+          <strong>Versioning:</strong> Package names and versions are immutable once published. To fix a bug, publish a new version (<code>1.0.1</code>). To yank a release, use the DELETE endpoint — but note that any Eaglercraft instances that cached the old manifest won't automatically update.
+        </div>
+      </section>
+
+      <!-- ── CLI ── -->
+      <section id="cli">
+        <div class="eyebrow">Reference</div>
+        <h2>Gradle Task Reference</h2>
+        <p>All Herz tasks are standard Gradle tasks invoked via <code>./gradlew</code>.</p>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Task</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="mono">buildAllPlatforms</td>
+                <td>Compiles all platform targets (common → teavm-js, teavm-wasm_gc, desktop) in order.</td>
+              </tr>
+              <tr>
+                <td class="mono">assembleHpckg</td>
+                <td>Assembles compiled classes + resources into a <code>.hpckg</code> archive.</td>
+              </tr>
+              <tr>
+                <td class="mono">:teavm-js:build</td>
+                <td>Compiles only the TeaVM JS target.</td>
+              </tr>
+              <tr>
+                <td class="mono">:teavm-wasm_gc:build</td>
+                <td>Compiles only the TeaVM WASM-GC target.</td>
+              </tr>
+              <tr>
+                <td class="mono">:desktop:build</td>
+                <td>Compiles only the desktop (LWJGL) target.</td>
+              </tr>
+              <tr>
+                <td class="mono">:common:build</td>
+                <td>Compiles only the shared common module.</td>
+              </tr>
+              <tr>
+                <td class="mono">clean</td>
+                <td>Deletes all build outputs.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>JarStubGenerator CLI</h3>
+        <p>The stub generator is a standalone JAR — no Gradle integration needed:</p>
+        <pre><span class="pre-lang">bash</span><code><span class="cm"># Generate stubs from a single JAR</span>
+java -jar JarStubGenerator-1.1.0.jar \
+  -f input.jar \
+  -out ./stubs/
+
+<span class="cm"># Generate stubs from multiple JARs (semicolon-separated)</span>
+java -jar JarStubGenerator-1.1.0.jar \
+  -f "main.jar;game.jar;protocol.jar" \
+  -out ./stubs/ \
+  -outname combined-stubs
+
+<span class="cm"># Apply bytecode transforms (JarTransformer mode)</span>
+java -jar JarStubGenerator-1.1.0.jar \
+  --transform \
+  -f input.jar \
+  -xform transforms.json \
+  -out ./out/</code></pre>
+
+        <h3>Environment variables</h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">HERZ_PUBLISH_TOKEN</td><td>Bearer token for publishing/deleting registry packages.</td></tr>
+              <tr><td class="mono">SUPABASE_URL</td><td>(API server) Supabase project URL.</td></tr>
+              <tr><td class="mono">SUPABASE_SERVICE_ROLE_KEY</td><td>(API server) Supabase service role key for write access.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout blue">
+          <strong>Repositories:</strong>
+          <ul style="margin:8px 0 0;padding-left:18px;font-size:13px">
+            <li><a href="https://github.com/Admanatine/Herz-1_8-Build">Herz-1_8-Build</a> — build configuration for 1.8 and 1.12</li>
+            <li><a href="https://github.com/Admanatine/Herz-EaglerStubs">Herz-EaglerStubs</a> — pre-generated stub JARs</li>
+            <li><a href="https://github.com/Admanatine/Herz-Prototype">Herz-Prototype</a> — example mod projects</li>
+            <li><a href="https://github.com/Admanatine/Herz-Core">Herz-Core</a> — event bus and core API</li>
+            <li><a href="https://github.com/Admanatine/Herz-Compile">Herz-Compile</a> — package assembler</li>
+            <li><a href="https://github.com/Admanatine/Herz-WebGUI">Herz-WebGUI</a> — HTML overlay bridge</li>
+            <li><a href="https://github.com/Admanatine/Herz-JarStubGenerator">Herz-JarStubGenerator</a> — stub generator tool</li>
+          </ul>
+        </div>
+      </section>
+
+    </div><!-- /content -->
+  </main>
+</div>
+
+<script>
+  // Mobile nav toggle
+  document.getElementById('nav-tog')?.addEventListener('click', () => {
+    const n = document.getElementById('m-nav');
+    n.style.display = n.style.display === 'block' ? 'none' : 'block';
+  });
+
+  // Scroll-spy
+  const secs = document.querySelectorAll('section[id], .hero[id]');
+  const links = document.querySelectorAll('.nav-a');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.nav-a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-25% 0px -65% 0px' });
+  secs.forEach(s => io.observe(s));
+</script>
