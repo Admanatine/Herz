@@ -1,0 +1,973 @@
+<title>Herz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* ── Tokens ── */
+  :root {
+    --bg:         #0E1015;
+    --surface:    #15171E;
+    --card:       #1C1F2A;
+    --border:     #262B3A;
+    --text:       #EDF0F7;
+    --muted:      #7B8196;
+    --accent:     #F5A014;
+    --accent-dim: rgba(245,160,20,.12);
+    --accent-glow:rgba(245,160,20,.25);
+    --code-bg:    #111318;
+    --sidebar-w:  240px;
+    --content-w:  72ch;
+  }
+
+  /* ── Reset ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  img { max-width: 100%; }
+
+  /* ── Layout ── */
+  .shell {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+  }
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-mark {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: #0E1015;
+    flex-shrink: 0;
+  }
+  .logo-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -.5px;
+  }
+  .logo-ver {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+    letter-spacing: .5px;
+    margin-top: 2px;
+  }
+
+  nav { padding: 20px 16px; flex: 1; }
+  .nav-section {
+    margin-bottom: 24px;
+  }
+  .nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 8px;
+    margin-bottom: 6px;
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 8px;
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: background .15s, color .15s;
+  }
+  .nav-link:hover {
+    background: var(--card);
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-link.active {
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: .5;
+    flex-shrink: 0;
+  }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .sidebar-footer a { color: var(--muted); }
+  .sidebar-footer a:hover { color: var(--accent); }
+
+  /* ── Main ── */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 80px 64px 72px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -120px; left: -60px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -2px;
+    text-wrap: balance;
+    margin-bottom: 20px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 52ch;
+    line-height: 1.65;
+    margin-bottom: 36px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+    border: 1px solid transparent;
+    line-height: 1;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #0E1015;
+  }
+  .btn-primary:hover { background: #ffb733; text-decoration: none; color: #0E1015; }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border);
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+
+  /* ── Version badges ── */
+  .version-strip {
+    display: flex;
+    gap: 10px;
+    padding: 16px 64px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .vbadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px 4px 6px;
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .vbadge-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  .vbadge-dot.green { background: #4CAF7D; }
+  .vbadge-dot.amber { background: var(--accent); }
+
+  /* ── Content ── */
+  .content {
+    padding: 64px 64px 100px;
+    max-width: calc(var(--content-w) + 128px);
+  }
+
+  section { margin-bottom: 80px; }
+  section:target { scroll-margin-top: 24px; }
+
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: -.5px;
+    margin-bottom: 16px;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -.3px;
+    margin-bottom: 10px;
+    margin-top: 36px;
+  }
+  p { color: #BEC3D4; margin-bottom: 16px; max-width: var(--content-w); }
+  ul, ol { color: #BEC3D4; padding-left: 20px; margin-bottom: 16px; max-width: var(--content-w); }
+  li { margin-bottom: 6px; }
+  strong { color: var(--text); font-weight: 600; }
+
+  /* ── Code ── */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .85em;
+    background: var(--accent-dim);
+    color: var(--accent);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow-x: auto;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  pre code {
+    display: block;
+    padding: 20px 24px;
+    background: none;
+    color: #C8CFDF;
+    font-size: 13px;
+    line-height: 1.75;
+    border-radius: 0;
+  }
+  .pre-lang {
+    position: absolute;
+    top: 10px; right: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+  /* syntax color hints */
+  .kw  { color: #C792EA; } /* keywords */
+  .str { color: #C3E88D; } /* strings */
+  .cm  { color: #546E7A; font-style: italic; } /* comment */
+  .am  { color: var(--accent); } /* amber — fn names, annotations */
+  .ty  { color: #82AAFF; } /* types */
+  .num { color: #F78C6C; } /* numbers */
+
+  /* ── Cards / Grid ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .card-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+  .card h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  .card p { font-size: 13px; margin-bottom: 0; }
+
+  /* ── Table ── */
+  .table-wrap { overflow-x: auto; margin-bottom: 32px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  th {
+    text-align: left;
+    padding: 10px 16px;
+    background: var(--card);
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+  }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { color: var(--accent); }
+  td.plain { font-family: inherit; font-size: 13.5px; }
+
+  /* ── Steps ── */
+  .steps { list-style: none; padding: 0; counter-reset: step; margin-bottom: 32px; }
+  .steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 16px;
+    padding-bottom: 28px;
+    position: relative;
+  }
+  .steps li:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 15px; top: 32px; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+  .step-n {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+  .step-n::before { content: counter(step); }
+  .step-body h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 6px;
+    margin-top: 4px;
+  }
+  .step-body p { font-size: 13.5px; margin-bottom: 10px; }
+
+  /* ── Callout ── */
+  .callout {
+    background: var(--accent-dim);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    font-size: 13.5px;
+    color: var(--text);
+    max-width: var(--content-w);
+  }
+  .callout strong { color: var(--accent); }
+
+  /* ── API method chips ── */
+  .method {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 8px;
+  }
+  .get  { background: rgba(76,175,125,.2); color: #4CAF7D; }
+  .post { background: rgba(130,170,255,.2); color: #82AAFF; }
+  .del  { background: rgba(247,78,78,.2); color: #F74E4E; }
+
+  .endpoint-row {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  .endpoint-row .path { color: var(--text); }
+  .endpoint-row .edesc { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* ── Mobile ── */
+  .mobile-bar {
+    display: none;
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 200;
+  }
+  .mobile-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+  }
+  .mobile-logo span { color: var(--accent); }
+  #nav-toggle { background: none; border: none; color: var(--text); cursor: pointer; font-size: 20px; padding: 4px; }
+  #mobile-nav {
+    display: none;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px;
+  }
+  #mobile-nav a {
+    display: block;
+    padding: 10px 12px;
+    color: var(--muted);
+    font-size: 14px;
+    border-radius: 6px;
+  }
+  #mobile-nav a:hover { background: var(--card); color: var(--text); text-decoration: none; }
+
+  @media (max-width: 800px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .mobile-bar { display: flex; }
+    .hero { padding: 48px 24px 40px; }
+    .version-strip { padding: 14px 24px; }
+    .content { padding: 40px 24px 80px; }
+    .hero::before { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<!-- Mobile bar -->
+<div class="mobile-bar">
+  <div class="mobile-logo">H<span>e</span>rz</div>
+  <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+</div>
+<div id="mobile-nav">
+  <a href="#overview">Overview</a>
+  <a href="#quickstart">Quick Start</a>
+  <a href="#concepts">Concepts</a>
+  <a href="#versions">Versions</a>
+  <a href="#mixins">Mixins</a>
+  <a href="#packages">Packages</a>
+  <a href="#api">Registry API</a>
+</div>
+
+<div class="shell">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">H</div>
+      <div>
+        <div class="logo-name">Herz</div>
+        <div class="logo-ver">v0.0.0 · Admanatine</div>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-section">
+        <div class="nav-label">Getting Started</div>
+        <a class="nav-link active" href="#overview"><span class="nav-dot"></span>Overview</a>
+        <a class="nav-link" href="#quickstart"><span class="nav-dot"></span>Quick Start</a>
+        <a class="nav-link" href="#concepts"><span class="nav-dot"></span>Core Concepts</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Reference</div>
+        <a class="nav-link" href="#versions"><span class="nav-dot"></span>Version Support</a>
+        <a class="nav-link" href="#mixins"><span class="nav-dot"></span>Mixins</a>
+        <a class="nav-link" href="#packages"><span class="nav-dot"></span>Package Format</a>
+        <a class="nav-link" href="#teavm"><span class="nav-dot"></span>TeaVM Targets</a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Registry</div>
+        <a class="nav-link" href="#api"><span class="nav-dot"></span>REST API</a>
+        <a class="nav-link" href="#publish"><span class="nav-dot"></span>Publishing</a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="https://github.com/Admanatine">GitHub</a> · MIT License
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <!-- Hero -->
+    <section class="hero" id="overview">
+      <div class="hero-eyebrow">Eaglercraft Mod SDK</div>
+      <h1>Build browser mods<br><span>without the boilerplate.</span></h1>
+      <p class="hero-sub">Herz is a package and build system for Eaglercraft modding. Write once against a clean API, compile to JavaScript or WASM, ship as a self-contained <code>.hpckg</code>.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#quickstart">Get Started</a>
+        <a class="btn btn-outline" href="https://github.com/Admanatine/Herz-Prototype">View Example</a>
+        <a class="btn btn-outline" href="#api">API Docs</a>
+      </div>
+    </section>
+
+    <!-- Version strip -->
+    <div class="version-strip">
+      <span class="vbadge"><span class="vbadge-dot green"></span>Eaglercraft 1.8.8 u53</span>
+      <span class="vbadge"><span class="vbadge-dot amber"></span>Eaglercraft 1.12.2 u1</span>
+      <span class="vbadge"><span class="vbadge-dot green"></span>TeaVM JS + WASM-GC</span>
+      <span class="vbadge"><span class="vbadge-dot green"></span>Gradle Kotlin DSL</span>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- Quick Start -->
+      <section id="quickstart">
+        <div class="section-eyebrow">Getting Started</div>
+        <h2>Quick Start</h2>
+        <p>Clone the prototype for your target version and follow the steps below. Herz requires <strong>JDK 17+</strong> and uses the Gradle wrapper — no global install needed.</p>
+
+        <ol class="steps">
+          <li>
+            <div class="step-n"></div>
+            <div class="step-body">
+              <h4>Clone the prototype</h4>
+              <p>Pick the folder matching your Eaglercraft version.</p>
+              <pre><code><span class="cm"># 1.8.8 u53</span>
+git clone https://github.com/Admanatine/Herz-Prototype
+cd Herz-Prototype/1.8
+
+<span class="cm"># 1.12.2 u1</span>
+cd Herz-Prototype/1.12</code></pre>
+            </div>
+          </li>
+          <li>
+            <div class="step-n"></div>
+            <div class="step-body">
+              <h4>Add the Eaglercraft source</h4>
+              <p>Herz builds against stubs by default. To compile platform-specific targets, symlink or copy the Eaglercraft source tree into <code>eagler-source/</code>.</p>
+              <pre><code><span class="cm"># Or use pre-built stubs from Herz-EaglerStubs</span>
+ls 1.8/1_8_8_u53/    <span class="cm"># base.jar  desktop.jar  javascript.jar  wasm_gc.jar</span>
+ls 1.12/1_12_2_u1/   <span class="cm"># same set for 1.12.2 u1</span></code></pre>
+            </div>
+          </li>
+          <li>
+            <div class="step-n"></div>
+            <div class="step-body">
+              <h4>Build all platforms</h4>
+              <pre><code>./gradlew buildAllPlatforms</code></pre>
+              <p>This compiles the common module, then the <code>teavm-js</code>, <code>teavm-wasm_gc</code>, and <code>desktop</code> subprojects in order.</p>
+            </div>
+          </li>
+          <li>
+            <div class="step-n"></div>
+            <div class="step-body">
+              <h4>Wire up your entrypoint</h4>
+              <p>Edit <code>src/.../bootstrap/ClientInit.java</code> to instantiate your client class. Herz calls <code>ClientInit.init()</code> after Minecraft finishes loading.</p>
+              <pre><code><span class="kw">public class</span> <span class="ty">ClientInit</span> {
+    <span class="kw">public static void</span> <span class="am">init</span>() {
+        <span class="ty">Client</span> client = <span class="kw">new</span> <span class="ty">Client</span>();
+    }
+}</code></pre>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- Core Concepts -->
+      <section id="concepts">
+        <div class="section-eyebrow">Core Concepts</div>
+        <h2>How Herz Works</h2>
+        <p>Herz sits between your mod code and the Eaglercraft runtime. It handles compilation, bytecode transformation, and packaging so you write against a stable API regardless of which Eaglercraft version you target.</p>
+
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-icon">📦</div>
+            <h4>Packages</h4>
+            <p>Mods ship as <code>.hpckg</code> files — zip archives with a manifest, compiled classes, and resources. Herz-Compile assembles them; the runtime loads them at startup.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔀</div>
+            <h4>Mixins</h4>
+            <p>Hook into Minecraft internals via SpongePowered ASM or classtransform. Declare targets in <code>mixin-targets.json</code>; Herz applies transforms at load time.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">⚡</div>
+            <h4>Multi-Platform</h4>
+            <p>One source tree, four outputs: <strong>common</strong> (shared logic), <strong>desktop</strong> (LWJGL), <strong>teavm-js</strong> (JS), <strong>teavm-wasm_gc</strong> (WASM). Platform-specific code lives in dedicated subprojects.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌐</div>
+            <h4>TeaVM</h4>
+            <p>Java→JS and Java→WASM-GC compilation via TeaVM. Herz configures the correct TeaVM version and eagler-fork dependencies per Eaglercraft version automatically.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🛡️</div>
+            <h4>Stubs</h4>
+            <p>Herz-EaglerStubs provides stub JARs (API surface only, no method bodies) so you can compile against Eaglercraft without distributing source. JarStubGenerator produces them from any source tree.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🎛️</div>
+            <h4>Event Bus</h4>
+            <p>Herz-Core ships a simple event bus. Mixins fire <code>MinecraftInitEvent</code>, <code>TickEvent</code>, and more. Subscribe with a plain method annotated <code>@Subscribe</code>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Versions -->
+      <section id="versions">
+        <div class="section-eyebrow">Reference</div>
+        <h2>Version Support</h2>
+        <p>Herz targets two Eaglercraft versions. Build files and stubs are organized under <code>1.8/</code> and <code>1.12/</code> subfolders in each repo.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>1.8.8 u53</th>
+                <th>1.12.2 u1</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>platform ID</td>
+                <td>eagler/1_8_8</td>
+                <td>eagler/1_12_2</td>
+              </tr>
+              <tr>
+                <td>TeaVM JS</td>
+                <td>0.9.2</td>
+                <td>0.9.2</td>
+              </tr>
+              <tr>
+                <td>TeaVM WASM-GC</td>
+                <td>0.12.1-EAGLER-R3</td>
+                <td>0.11.0-EAGLER-R1</td>
+              </tr>
+              <tr>
+                <td>Minecraft pkg</td>
+                <td class="plain">net.minecraft.client.Minecraft (v1_8)</td>
+                <td class="plain">net.minecraft.client.Minecraft</td>
+              </tr>
+              <tr>
+                <td>platform-api</td>
+                <td class="plain">separate jar</td>
+                <td class="plain">bundled in base</td>
+              </tr>
+              <tr>
+                <td>stubs repo</td>
+                <td>1.8/1_8_8_u53/</td>
+                <td>1.12/1_12_2_u1/</td>
+              </tr>
+              <tr>
+                <td>desktop main</td>
+                <td class="plain">...lwjgl.MainClass</td>
+                <td class="plain">...internal.MainClass</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <strong>Note:</strong> The 1.12.2 wasm_gc stubs use copies of <code>base.jar</code> because the TeaVM eagler fork JARs (<code>org.teavm.platform</code>, <code>org.teavm.interop</code>) are not available on Maven Central. They are pulled at build time from the Eaglercraft source tree.
+        </div>
+      </section>
+
+      <!-- Mixins -->
+      <section id="mixins">
+        <div class="section-eyebrow">Reference</div>
+        <h2>Writing Mixins</h2>
+        <p>Declare mixin classes in <code>mixin-targets.json</code> and annotate them with <code>@Mixin</code>. Herz uses SpongePowered ASM for both 1.8 and 1.12.</p>
+
+        <h3>Declaring targets</h3>
+        <pre><span class="pre-lang">json</span><code>{
+  <span class="str">"mixins"</span>: [
+    <span class="str">"net.ada.mixins.GuiScreenMixin"</span>,
+    <span class="str">"net.ada.mixins.MinecraftMixin"</span>
+  ]
+}</code></pre>
+
+        <h3>Injecting into Minecraft</h3>
+        <pre><span class="pre-lang">java</span><code><span class="am">@Mixin</span>(<span class="ty">Minecraft</span>.<span class="kw">class</span>)
+<span class="kw">public class</span> <span class="ty">MinecraftMixin</span> {
+
+    <span class="am">@Inject</span>(method = <span class="str">"startGame"</span>, at = <span class="am">@At</span>(<span class="str">"TAIL"</span>))
+    <span class="kw">private void</span> <span class="am">herz$onMinecraftInit</span>(<span class="ty">CallbackInfo</span> ci) {
+        <span class="ty">Client</span>.INSTANCE.getEventBus().fireEvent(
+            <span class="ty">MinecraftInitEvent</span>.<span class="kw">class</span>, <span class="kw">new</span> <span class="ty">MinecraftInitEvent</span>()
+        );
+    }
+
+    <span class="am">@Inject</span>(method = <span class="str">"runTick"</span>, at = <span class="am">@At</span>(<span class="str">"HEAD"</span>))
+    <span class="kw">private void</span> <span class="am">herz$onTick</span>(<span class="ty">CallbackInfo</span> ci) {
+        <span class="ty">Client</span>.INSTANCE.getEventBus().fireEvent(
+            <span class="ty">TickEvent</span>.<span class="kw">class</span>, <span class="kw">new</span> <span class="ty">TickEvent</span>()
+        );
+    }
+}</code></pre>
+
+        <h3>Version differences</h3>
+        <p>For 1.8.8, Eaglercraft classes live under the <code>net.lax1dude.eaglercraft.v1_8</code> package. For 1.12.2, they're at <code>net.lax1dude.eaglercraft</code> (no version suffix). Use your build's <code>common</code> subproject for shared mixin logic and platform subprojects for platform-specific injections.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Class</th><th>1.8.8 package</th><th>1.12.2 package</th></tr></thead>
+            <tbody>
+              <tr><td>Keyboard</td><td>...v1_8.Keyboard</td><td>...eaglercraft.Keyboard</td></tr>
+              <tr><td>Mouse</td><td>...v1_8.Mouse</td><td>...eaglercraft.Mouse</td></tr>
+              <tr><td>Minecraft</td><td>...v1_8.client.Minecraft</td><td>...client.Minecraft</td></tr>
+              <tr><td>GuiScreen</td><td>...v1_8.client.gui.GuiScreen</td><td>...client.gui.GuiScreen</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Packages -->
+      <section id="packages">
+        <div class="section-eyebrow">Reference</div>
+        <h2>Package Format</h2>
+        <p>A Herz package is a <code>.hpckg</code> file — a ZIP with the following layout:</p>
+
+        <pre><code>mymod-1.0.hpckg
+├── herz-manifest.json   <span class="cm"># package metadata</span>
+├── classes/             <span class="cm"># compiled .class files</span>
+├── resources/           <span class="cm"># assets (textures, lang, etc.)</span>
+└── mixin-targets.json   <span class="cm"># optional, mixin class list</span></code></pre>
+
+        <h3>herz-manifest.json</h3>
+        <pre><span class="pre-lang">json</span><code>{
+  <span class="str">"packageName"</span>: <span class="str">"net.ada.mymod"</span>,
+  <span class="str">"version"</span>: <span class="str">"1.0.0"</span>,
+  <span class="str">"authors"</span>: [<span class="str">"yourname"</span>],
+  <span class="str">"platform"</span>: <span class="str">"eagler/1_8_8"</span>,
+  <span class="str">"permissions"</span>: [],
+  <span class="str">"entrypoint"</span>: <span class="str">"net.ada.mymod.bootstrap.ClientInit"</span>
+}</code></pre>
+
+        <h3>herz-platform.json (build system)</h3>
+        <p>Each version folder in Herz-1_8-Build carries a <code>herz-platform.json</code> that pins the Eaglercraft version and lists available subplatforms:</p>
+        <pre><span class="pre-lang">json</span><code>{
+  <span class="str">"platform"</span>: <span class="str">"eagler/1_12_2"</span>,
+  <span class="str">"herzVersion"</span>: <span class="str">"0.0.0"</span>,
+  <span class="str">"version"</span>: <span class="str">"u1"</span>,
+  <span class="str">"author"</span>: <span class="str">"lax1dude"</span>,
+  <span class="str">"subplatforms"</span>: {
+    <span class="str">"desktop"</span>: <span class="str">"desktop"</span>,
+    <span class="str">"common"</span>: <span class="str">""</span>,
+    <span class="str">"teavm-wasm_gc"</span>: <span class="str">"teavm-wasm_gc"</span>,
+    <span class="str">"teavm-js"</span>: <span class="str">"teavm-js"</span>
+  }
+}</code></pre>
+      </section>
+
+      <!-- TeaVM -->
+      <section id="teavm">
+        <div class="section-eyebrow">Reference</div>
+        <h2>TeaVM Targets</h2>
+        <p>Herz produces browser-runnable output via TeaVM. Two targets are supported:</p>
+
+        <h3>teavm-js</h3>
+        <p>Compiles Java to JavaScript. The output is a single <code>classes.js</code> bundled with an HTML shell. Eaglercraft's custom JS APIs (<code>org.teavm.jso.*</code>) are provided by the eagler fork of TeaVM.</p>
+        <pre><span class="pre-lang">kts</span><code><span class="cm">// teavm-js/build.gradle.kts (1.8)</span>
+dependencies {
+    teavm(<span class="str">"org.teavm:teavm-core:0.9.2"</span>)
+    teavm(<span class="str">"org.teavm:teavm-classlib:0.9.2"</span>)
+}
+
+<span class="cm">// 1.12.2 uses the same teavm-js version</span></code></pre>
+
+        <h3>teavm-wasm_gc</h3>
+        <p>Compiles Java to WebAssembly GC. Produces <code>classes.wasm</code> + a small JS bootstrap. The eagler fork version differs per Eaglercraft version:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Version</th><th>TeaVM WASM fork</th><th>Source dir</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>1.8.8 u53</td>
+                <td>0.12.1-EAGLER-R3</td>
+                <td class="plain">src/wasm-gc-teavm/java</td>
+              </tr>
+              <tr>
+                <td>1.12.2 u1</td>
+                <td>0.11.0-EAGLER-R1</td>
+                <td class="plain">src/wasm-gc-teavm/java</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <strong>Tip:</strong> The wasm-gc and teavm-js subprojects each have their own <code>build.gradle.kts</code>. They inherit the common compiled output via <code>includeBuild()</code> in <code>settings.gradle.kts</code>.
+        </div>
+      </section>
+
+      <!-- API -->
+      <section id="api">
+        <div class="section-eyebrow">Registry</div>
+        <h2>Registry API</h2>
+        <p>The Herz package registry is a REST API hosted on Vercel + Supabase. Use it to search for and resolve packages without installing anything locally.</p>
+
+        <h3>Base URL</h3>
+        <pre><code>https://herz-api.vercel.app/api</code></pre>
+
+        <h3>Endpoints</h3>
+
+        <div class="endpoint-row">
+          <div><span class="method get">GET</span><span class="path">/packages</span></div>
+          <div class="edesc">List or search packages. Query params: <code>name</code>, <code>platform</code>, <code>author</code>, <code>limit</code>, <code>page</code></div>
+        </div>
+        <div class="endpoint-row">
+          <div><span class="method post">POST</span><span class="path">/packages</span></div>
+          <div class="edesc">Publish a new package. Requires <code>Authorization: Bearer &lt;HERZ_PUBLISH_TOKEN&gt;</code></div>
+        </div>
+        <div class="endpoint-row">
+          <div><span class="method get">GET</span><span class="path">/packages/:id</span></div>
+          <div class="edesc">Fetch a package by UUID, internal id, or <code>name@version</code></div>
+        </div>
+        <div class="endpoint-row">
+          <div><span class="method del">DELETE</span><span class="path">/packages/:id</span></div>
+          <div class="edesc">Delete a package. Requires Bearer token.</div>
+        </div>
+
+        <h3>Examples</h3>
+        <pre><span class="pre-lang">bash</span><code><span class="cm"># Search packages by platform</span>
+curl <span class="str">"https://herz-api.vercel.app/api/packages?platform=eagler/1_12_2"</span>
+
+<span class="cm"># Fetch a specific package</span>
+curl <span class="str">"https://herz-api.vercel.app/api/packages/net.ada.mymod@1.0.0"</span>
+
+<span class="cm"># Publish a package</span>
+curl -X POST \
+  -H <span class="str">"Authorization: Bearer $HERZ_PUBLISH_TOKEN"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"package_name":"net.ada.mymod","package_version":"1.0.0",
+       "authors":["you"],"platform":"eagler/1_12_2","permissions":[]}'</span> \
+  <span class="str">"https://herz-api.vercel.app/api/packages"</span>
+
+<span class="cm"># Delete a package</span>
+curl -X DELETE \
+  -H <span class="str">"Authorization: Bearer $HERZ_PUBLISH_TOKEN"</span> \
+  <span class="str">"https://herz-api.vercel.app/api/packages/net.ada.mymod@1.0.0"</span></code></pre>
+      </section>
+
+      <!-- Publish -->
+      <section id="publish">
+        <div class="section-eyebrow">Registry</div>
+        <h2>Publishing a Package</h2>
+        <p>Publishing requires a token issued by an Admanatine administrator. Set it as the <code>HERZ_PUBLISH_TOKEN</code> environment variable, or pass it directly.</p>
+
+        <ol class="steps">
+          <li>
+            <div class="step-n"></div>
+            <div class="step-body">
+              <h4>Build your package</h4>
+              <pre><code>./gradlew buildAllPlatforms
+ls build/herz/        <span class="cm"># mymod-1.0.hpckg</span></code></pre>
+            </div>
+          </li>
+          <li>
+            <div class="step-n"></div>
+            <div class="step-body">
+              <h4>Upload the manifest</h4>
+              <p>POST the package metadata. Attach the <code>.hpckg</code> URL or bytes in the <code>manifest</code> field.</p>
+              <pre><code>curl -X POST \
+  -H <span class="str">"Authorization: Bearer $HERZ_PUBLISH_TOKEN"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d @build/herz/mymod-1.0-manifest.json \
+  https://herz-api.vercel.app/api/packages</code></pre>
+            </div>
+          </li>
+          <li>
+            <div class="step-n"></div>
+            <div class="step-body">
+              <h4>Verify</h4>
+              <pre><code>curl https://herz-api.vercel.app/api/packages/net.ada.mymod@1.0.0</code></pre>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+    </div><!-- /content -->
+  </main>
+</div>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const mobileNav = document.getElementById('mobile-nav');
+  toggle?.addEventListener('click', () => {
+    const open = mobileNav.style.display === 'block';
+    mobileNav.style.display = open ? 'none' : 'block';
+  });
+
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
